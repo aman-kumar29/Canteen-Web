@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export const getAllFood = async () => {
     const {data} = await axios.get('/api/foods');
     return data;

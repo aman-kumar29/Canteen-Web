@@ -1,25 +1,25 @@
 import { Router } from "express";
 import jwt from 'jsonwebtoken';
-import { sampleUsers } from "../data";
-import { BAD_REQUEST } from "../constants/httpStatus";
+import { sampleUsers } from "../data.js";
+import { BAD_REQUEST } from "../constants/httpStatus.js";
 
 const router = Router();
 
-router.post('/', (req,res)=>{
-    const {email,password} = req.body();
+router.post('/login', (req,res)=>{
+    const {email,password} = req.body;
 
     if(!email || !password){
         res.status(BAD_REQUEST).send('Email or Password Not Given');
     }
 
     const user = sampleUsers.find(
-        (user)=> user.email === email && user.password === password
+        (user)=> user.email === email
     )
-    if(user){
+    if(user && user.password === password){
         res.send(generateTokenResponse(user));
         return;
     }
-    res.send(BAD_REQUEST)
+    res.send(BAD_REQUEST).send('Username or password is invalid');
 })
 const generateTokenResponse = (user) => {
     const token = jwt.sign(
