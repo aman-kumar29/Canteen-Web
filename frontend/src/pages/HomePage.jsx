@@ -27,30 +27,30 @@ export default function HomePage() {
   useEffect(() => {
     getAllTags().then(tags => {
       dispatch({type:'TAGS_LOADED', payload : tags});
-      console.log("This is the tags array",tags);
+      // console.log("This is the tags array",tags);
   })
     .catch(error => console.error('Error loading tags:', error))
     const loadFoods = () => {
       if (tag) {
-        console.log("tag");
+        // console.log("tag");
         return getAllByTag(tag);
       } else if (searchTerm) {
-        console.log("search");
+        // console.log("search");
         return search(searchTerm);
       } else {
-        console.log("none");
+        // console.log("none");
         return getAllFood();
       }
     };
 
     loadFoods().then(foods => {
-        console.log('Foods loaded:', foods); // Log loaded foods
+        // console.log('Foods loaded:', foods); // Log loaded foods
         dispatch({ type: 'FOODS_LOADED', payload: foods });
       })
       .catch(error => console.error('Error loading foods:', error)); // Log any errors
   }, [searchTerm, tag]);
 
-  console.log('Current foods:', foods); // Log current state of foods
+  // console.log('Current foods:', foods); // Log current state of foods
 
   return (
     <>

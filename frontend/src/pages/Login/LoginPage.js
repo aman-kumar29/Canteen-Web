@@ -23,7 +23,7 @@ export default function LoginPage() {
     if (!user) return;
 
     returnUrl ? navigate(returnUrl) : navigate('/');
-  }, [user]);
+  }, [user,returnUrl]);
 
   const submit = async ({ email, password }) => {
     await login(email, password);
@@ -55,12 +55,12 @@ export default function LoginPage() {
 
           <Button type="submit" text="Login" />
 
-          {/* <div className={classes.register}>
+          <div className={classes.register}>
             New user? &nbsp;
             <Link to={`/register${returnUrl ? '?returnUrl=' + returnUrl : ''}`}>
               Register here
             </Link>
-          </div> */}
+          </div>
         </form>
       </div>
     </div>
