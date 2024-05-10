@@ -5,6 +5,9 @@ import FoodPage from './pages/Food/FoodPage.jsx'
 import CartPage from './pages/Cart/CartPage.jsx'
 import LoginPage from './pages/Login/LoginPage.js'
 import RegisterPage from './pages/Register/RegisterPage.js'
+import CheckoutPage from './pages/Checkout/CheckoutPage.js'
+import AuthRoute from './components/AuthRoute/AuthRoute.js'
+import PaymentPage from './pages/Payment/PaymentPage.js'
 
 export default function AppRoutes() {
   return (
@@ -16,6 +19,14 @@ export default function AppRoutes() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path='/checkout' element={
+        <AuthRoute>
+          <CheckoutPage/>
+        </AuthRoute>}/>
+        <Route path='/payment' element={
+        <AuthRoute>
+          <PaymentPage/>
+        </AuthRoute>}/>
     </Routes>
   )
 }
