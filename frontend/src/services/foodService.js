@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export const getAllFood = async () => {
     const {data} = await axios.get('/api/foods');
+    console.log(data, )
     return data;
 };
 export const search = async (searchTerm) =>{

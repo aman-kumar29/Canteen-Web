@@ -16,10 +16,13 @@ app.use(
     cors(
         {
             credentials : true,
-            origin:['http://localhost:3000'],
+            origin:['http://127.0.0.1:3000'],
         }
     )
 );
+app.get('/', (req,res)=>{
+    res.send("Bakend server is up---");
+})
 
 app.use('/api/foods', foodRouter);
 app.use('/api/users', userRouter);

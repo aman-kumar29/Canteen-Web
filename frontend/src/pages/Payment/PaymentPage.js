@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import classes from './paymentPage.module.css';
-import { getNewOrderForCurrentUser } from '../../services/orderService';
-import Title from '../../components/Title/Title';
-import OrderItemsList from '../../components/OrderItemsList/OrderItemsList';
-import Map from '../../components/Map/Map';
-import PaypalButtons from '../../components/PaypalButtons/PaypalButtons';
+import { getNewOrderForCurrentUser } from '../../services/orderService.js'
+import Title from '../../components/Title/Title.js';
+import OrderItemsList from '../../components/OrderItemsList/OrderItemsList.js';
+import Map from '../../components/Map/Map.js';
+import PaypalButtons from '../../components/PaypalButtons/PaypalButtons.js';
+
 
 export default function PaymentPage() {
   const [order, setOrder] = useState();
@@ -12,8 +13,8 @@ export default function PaymentPage() {
   useEffect(() => {
     getNewOrderForCurrentUser().then(data => setOrder(data));
   }, []);
-
   if (!order) return;
+
 
   return (
     <>
@@ -32,11 +33,18 @@ export default function PaymentPage() {
           </div>
           <OrderItemsList order={order} />
         </div>
-
-        <div className={classes.map}>
+        {/* <div className={classes.map}>
           <Title title="Your Location" fontSize="1.6rem" />
           <Map readonly={true} location={order.addressLatLng} />
-        </div>
+        </div> */}
+        <center>
+          For Testing
+          <p><strong>sandbox-paypal-email</strong> : sb-lpjbf30870484@personal.example.com</p>
+          <p><strong>sandbox-paypal-password</strong> : paypalmoney</p>
+          <p>Credit Card : 4032031608484704</p>
+          <p>EXP date : 07/29</p>
+          <p>CVC Code : 779</p>
+        </center>
 
         <div className={classes.buttons_container}>
           <div className={classes.buttons}>
@@ -45,5 +53,5 @@ export default function PaymentPage() {
         </div>
       </div>
     </>
-  );
+  )
 }
