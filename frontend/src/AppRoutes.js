@@ -8,6 +8,7 @@ import RegisterPage from './pages/Register/RegisterPage.js'
 import CheckoutPage from './pages/Checkout/CheckoutPage.js'
 import AuthRoute from './components/AuthRoute/AuthRoute.js'
 import PaymentPage from './pages/Payment/PaymentPage.js'
+import OrderTrackPage from './pages/OrderTrack/OrderTrackPage.js'
 
 export default function AppRoutes() {
   return (
@@ -26,6 +27,10 @@ export default function AppRoutes() {
         <Route path='/payment' element={
         <AuthRoute>
           <PaymentPage/>
+        </AuthRoute>}/>
+        <Route path='/track/:orderId' element={
+        <AuthRoute>
+          <OrderTrackPage/>
         </AuthRoute>}/>
     </Routes>
   )

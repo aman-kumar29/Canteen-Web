@@ -44,6 +44,7 @@ export default function PaymentPage() {
           <p>Credit Card : 4032031608484704</p>
           <p>EXP date : 07/29</p>
           <p>CVC Code : 779</p>
+          <p>City - Moody, Alabama, 35004, US</p>
         </center>
 
         <div className={classes.buttons_container}>
