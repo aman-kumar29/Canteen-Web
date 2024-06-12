@@ -3,7 +3,6 @@ import classes from './paymentPage.module.css';
 import { getNewOrderForCurrentUser } from '../../services/orderService.js'
 import Title from '../../components/Title/Title.js';
 import OrderItemsList from '../../components/OrderItemsList/OrderItemsList.js';
-import Map from '../../components/Map/Map.js';
 import PaypalButtons from '../../components/PaypalButtons/PaypalButtons.js';
 
 
