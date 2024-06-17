@@ -55,10 +55,10 @@ export default function OrderTrackPage() {
           <OrderItemsList order={order} />
         </div>
 
-        <div>
+        {/* <div>
           <Title title="Your Location" fontSize="1.6rem" />
           <Map location={order.addressLatLng} readonly={true} />
-        </div>
+        </div> */}
 
         {order.status === 'NEW' && (
           <div className={classes.payment}>

@@ -10,6 +10,7 @@ import AuthRoute from './components/AuthRoute/AuthRoute.js'
 import PaymentPage from './pages/Payment/PaymentPage.js'
 import OrderTrackPage from './pages/OrderTrack/OrderTrackPage.js'
 import ProfilePage from './pages/Profile/ProfilePage.js'
+import OrdersPage from './pages/Orders/OrdersPage.js'
 
 export default function AppRoutes() {
   return (
@@ -36,6 +37,10 @@ export default function AppRoutes() {
       <Route path='/profile' element={
         <AuthRoute>
           <ProfilePage />
+        </AuthRoute>} />
+      <Route path='/orders' element={
+        <AuthRoute>
+          <OrdersPage />
         </AuthRoute>} />
     </Routes>
   )
