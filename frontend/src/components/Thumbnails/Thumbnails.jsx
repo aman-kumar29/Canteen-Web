@@ -9,11 +9,13 @@ export default function Thumbnails({ foods }) {
       {foods.map(food => (
         <li key={food.id}>
           <Link to={`/food/${food.id}`}>
+            <center>
             <img
               className={classes.image}
               src={`/foods/${food.imageURL}`}
               alt={food.name}
             />
+            </center>
 
             <div className={classes.content}>
               <div className={classes.name}>{food.name}</div>

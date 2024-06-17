@@ -1,18 +1,18 @@
-.list {
+  .list {
+    width:100%;
+    max-width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    list-style-type: none;
-    padding: 0;
-  }
+    flex-wrap:wrap;
+    padding: 10px;
+    }
   
   .list li a {
     height: 22.5rem;
     width: 20rem;
     border: 1px solid whitesmoke;
     border-radius: 1rem;
-    margin: 0.5rem;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -20,8 +20,8 @@
   }
   
   .image {
-    object-fit: cover;
-    height: 14.5rem;
+    width: 95%;
+    height: 12.5rem;;
   }
   
   .content {

@@ -50,8 +50,6 @@ export default function HomePage() {
       .catch(error => console.error('Error loading foods:', error)); // Log any errors
   }, [searchTerm, tag]);
 
-  // console.log('Current foods:', foods); // Log current state of foods
-
   return (
     <>
       <Search />
