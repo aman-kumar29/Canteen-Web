@@ -28,7 +28,6 @@ export default function Button({
   );
 }
 
-// Setting default props
 Button.defaultProps = {
   type: 'primary', // 'primary' is the common Ant Design button type
   text: 'Submit',

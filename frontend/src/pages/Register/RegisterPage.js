@@ -1,25 +1,19 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Input from '../../components/Input/Input';
-import Title from '../../components/Title/Title';
-import Button from '../../components/Button/Button';
-import { Link } from 'react-router-dom';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { Typography, Input as AntInput, Button as AntButton } from 'antd'; // Import Ant Design components
 import { useAuth } from '../../hooks/useAuth';
 import { EMAIL } from '../../constants/patterns';
 
+const { Title } = Typography;
+
 export default function RegisterPage() {
   const auth = useAuth();
-  const { user } = auth;
+  const { user, register: registerUser } = auth;
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const returnUrl = params.get('returnUrl');
-
-  useEffect(() => {
-    if (!user) return;
-    returnUrl ? navigate(returnUrl) : navigate('/');
-  }, [user, returnUrl, navigate]);
-
+  
   const {
     handleSubmit,
     register,
@@ -27,75 +21,182 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm();
 
-  const submit = async (data) => {
-    await auth.register(data);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [address, setAddress] = useState('');
+
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [addressError, setAddressError] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      returnUrl ? navigate(returnUrl) : navigate('/');
+    }
+  }, [user, returnUrl, navigate]);
+
+  const validateForm = () => {
+    let valid = true;
+    if (!name) {
+      setNameError('Name is required');
+      valid = false;
+    } else if (name.length < 5) {
+      setNameError('Name must be at least 5 characters');
+      valid = false;
+    } else {
+      setNameError('');
+    }
+
+    if (!email) {
+      setEmailError('Email is required');
+      valid = false;
+    } else if (!EMAIL.value.test(email)) {
+      setEmailError('Invalid email address');
+      valid = false;
+    } else {
+      setEmailError('');
+    }
+
+    if (!password) {
+      setPasswordError('Password is required');
+      valid = false;
+    } else if (password.length < 5) {
+      setPasswordError('Password must be at least 5 characters');
+      valid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    if (confirmPassword !== password) {
+      setConfirmPasswordError('Passwords do not match');
+      valid = false;
+    } else {
+      setConfirmPasswordError('');
+    }
+
+    if (!address) {
+      setAddressError('Address is required');
+      valid = false;
+    } else if (address.length < 10) {
+      setAddressError('Address must be at least 10 characters');
+      valid = false;
+    } else {
+      setAddressError('');
+    }
+
+    return valid;
+  };
+
+  const submit = async () => {
+    if (validateForm()) {
+      try {
+        await registerUser({
+          name,
+          email,
+          password,
+          address
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <Title title="Register" className="text-3xl font-bold text-center mb-6" />
+        <Title level={2} className="text-center mb-6">
+          Register
+        </Title>
         <form onSubmit={handleSubmit(submit)} noValidate>
-          {/* Name Input */}
-          <Input
-            type="text"
-            label="Name"
-            {...register('name', {
-              required: 'Name is required',
-              minLength: { value: 5, message: 'Name must be at least 5 characters' },
-            })}
-            error={errors.name}
-          />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <AntInput
+              placeholder="Enter your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              status={nameError ? 'error' : ''}
+            />
+            {nameError && (
+              <div className="text-red-500 text-sm mt-1">
+                {nameError}
+              </div>
+            )}
+          </div>
 
-          {/* Email Input */}
-          <Input
-            type="email"
-            label="Email"
-            {...register('email', {
-              required: 'Email is required',
-              pattern: { value: EMAIL, message: 'Invalid email address' },
-            })}
-            error={errors.email}
-          />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <AntInput
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              status={emailError ? 'error' : ''}
+            />
+            {emailError && (
+              <div className="text-red-500 text-sm mt-1">
+                {emailError}
+              </div>
+            )}
+          </div>
 
-          {/* Password Input */}
-          <Input
-            type="password"
-            label="Password"
-            {...register('password', {
-              required: 'Password is required',
-              minLength: { value: 5, message: 'Password must be at least 5 characters' },
-            })}
-            error={errors.password}
-          />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <AntInput.Password
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              status={passwordError ? 'error' : ''}
+            />
+            {passwordError && (
+              <div className="text-red-500 text-sm mt-1">
+                {passwordError}
+              </div>
+            )}
+          </div>
 
-          {/* Confirm Password Input */}
-          <Input
-            type="password"
-            label="Confirm Password"
-            {...register('confirmPassword', {
-              required: 'Please confirm your password',
-              validate: (value) =>
-                value !== getValues('password') ? 'Passwords do not match' : true,
-            })}
-            error={errors.confirmPassword}
-          />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <AntInput.Password
+              placeholder="Confirm your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              status={confirmPasswordError ? 'error' : ''}
+            />
+            {confirmPasswordError && (
+              <div className="text-red-500 text-sm mt-1">
+                {confirmPasswordError}
+              </div>
+            )}
+          </div>
 
-          {/* Address Input */}
-          <Input
-            type="text"
-            label="Address"
-            {...register('address', {
-              required: 'Address is required',
-              minLength: { value: 10, message: 'Address must be at least 10 characters' },
-            })}
-            error={errors.address}
-          />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+            <AntInput
+              placeholder="Enter your address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              status={addressError ? 'error' : ''}
+            />
+            {addressError && (
+              <div className="text-red-500 text-sm mt-1">
+                {addressError}
+              </div>
+            )}
+          </div>
 
-          {/* Register Button */}
-          <Button type="submit" text="Register" className="w-full mt-4" />
+          <AntButton
+            type="primary"
+            htmlType="submit"
+            className="w-full mt-4"
+          >
+            Register
+          </AntButton>
 
-          {/* Login Redirect Link */}
           <div className="mt-4 text-center text-gray-600">
             Already a user? &nbsp;
             <Link

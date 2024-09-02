@@ -1,70 +1,121 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth.js';
-import Title from '../../components/Title/Title.js';
-import Input from '../../components/Input/Input.js';
-import Button from '../../components/Button/Button.js';
-import { EMAIL } from '../../constants/patterns.js';
+import { Input as AntInput, Button as AntButton, Typography } from 'antd'; // Import Ant Design components
+import { useAuth } from '../../hooks/useAuth';
+import { EMAIL } from '../../constants/patterns';
+
+const { Title } = Typography;
 
 export default function LoginPage() {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
-
   const navigate = useNavigate();
   const { user, login } = useAuth();
   const [params] = useSearchParams();
   const returnUrl = params.get('returnUrl');
+  
+  // Local state for form input values
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  
+  // Local state for error messages
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
-    if (!user) return;
+    if (user) {
+      returnUrl ? navigate(returnUrl) : navigate('/');
+    }
+  }, [user, returnUrl, navigate]);
 
-    returnUrl ? navigate(returnUrl) : navigate('/');
-  }, [user, returnUrl]);
+  // Function to validate form inputs
+  const validateForm = () => {
+    let valid = true;
+    if (!email) {
+      setEmailError('Email is required');
+      valid = false;
+    } else if (!EMAIL.value.test(email)) {
+      setEmailError('Invalid email address');
+      valid = false;
+    } else {
+      setEmailError('');
+    }
 
-  const submit = async ({ email, password }) => {
-    await login(email, password);
+    if (!password) {
+      setPasswordError('Password is required');
+      valid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    return valid;
+  };
+
+  // Handle form submission
+  const handleClick = async () => {
+    if (validateForm()) {
+      try {
+        await login(email, password);
+      } catch (err) {
+        console.error(err);
+      }
+    }
   };
 
   return (
-    <div className="h-[90vh] 3xl:h-[120vh] flex items-center justify-center bg-gray-100 px-4">
+    <div className="h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <Title title="Login" className="text-3xl font-bold text-center mb-6" />
-        <form onSubmit={handleSubmit(submit)} noValidate>
-          <Input
+        <Title level={2} className="text-center mb-6">
+          Login
+        </Title>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <AntInput
             type="email"
-            label="Email"
-            {...register('email', {
-              required: 'Email is required',
-              pattern: EMAIL,
-            })}
-            error={errors.email}
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            status={emailError ? 'error' : ''}
+            className="w-full"
           />
+          {emailError && (
+            <div className="text-red-500 text-sm mt-1">
+              {emailError}
+            </div>
+          )}
+        </div>
 
-          <Input
-            type="password"
-            label="Password"
-            {...register('password', {
-              required: 'Password is required',
-            })}
-            error={errors.password}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <AntInput.Password
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            status={passwordError ? 'error' : ''}
+            className="w-full"
           />
+          {passwordError && (
+            <div className="text-red-500 text-sm mt-1">
+              {passwordError}
+            </div>
+          )}
+        </div>
 
-          <Button type="submit" text="Login" className="w-full mt-4" />
+        <AntButton
+          type="primary"
+          className="w-full mt-4"
+          onClick={handleClick}
+        >
+          Login
+        </AntButton>
 
-          <div className="mt-4 text-center text-gray-600">
-            New user? &nbsp;
-            <Link
-              to={`/register${returnUrl ? '?returnUrl=' + returnUrl : ''}`}
-              className="text-blue-500 hover:underline"
-            >
-              Register here
-            </Link>
-          </div>
-        </form>
+        <div className="mt-4 text-center text-gray-600">
+          New user? &nbsp;
+          <Link
+            to={`/register${returnUrl ? '?returnUrl=' + returnUrl : ''}`}
+            className="text-blue-500 hover:underline"
+          >
+            Register here
+          </Link>
+        </div>
       </div>
     </div>
   );
