@@ -1,10 +1,17 @@
-import classes from './inputContainer.module.css';
+// InputContainer.js
+import React from 'react';
 
-export default function InputContainer({ label, bgColor, children }) {
+export default function InputContainer({ label, children }) {
   return (
-    <div className={classes.container} style={{ backgroundColor: bgColor }}>
-      <label className={classes.label}>{label}</label>
-      <div className={classes.content}>{children}</div>
+    <div className="mb-4">
+      {label && (
+        <label className="block text-gray-700 text-sm font-medium">
+          {label}
+        </label>
+      )}
+      <div className="bg-white rounded-md shadow-sm border border-gray-200">
+        {children}
+      </div>
     </div>
   );
 }

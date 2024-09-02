@@ -1,4 +1,5 @@
-import classes from './button.module.css';
+import React from 'react';
+import { Button as AntButton } from 'antd'; // Import Ant Design's Button component
 
 export default function Button({
   type,
@@ -11,26 +12,25 @@ export default function Button({
   height,
 }) {
   return (
-    <div className={classes.container}>
-      <button
+    <center className=''>
+      <AntButton
+        type={type}
+        onClick={onClick}
         style={{
           color,
           backgroundColor,
-          fontSize,
-          width,
-          height,
         }}
-        type={type}
-        onClick={onClick}
+        className="w-[100%] px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold shadow-md hover:shadow-lg transition duration-200 ease-in-out transform hover:-translate-y-1"
       >
         {text}
-      </button>
-    </div>
+      </AntButton>
+    </center>
   );
 }
 
+// Setting default props
 Button.defaultProps = {
-  type: 'button',
+  type: 'primary', // 'primary' is the common Ant Design button type
   text: 'Submit',
   backgroundColor: '#e72929',
   color: 'white',
