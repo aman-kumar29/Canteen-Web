@@ -1,3 +1,3 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://night-canteen-ak.onrender.com';
+axios.defaults.baseURL = 'http://localhost:5000';

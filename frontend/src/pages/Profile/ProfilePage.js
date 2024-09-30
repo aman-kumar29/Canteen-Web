@@ -18,6 +18,8 @@ export default function ProfilePage() {
   } = useForm();
 
   const { user, updateProfile } = useAuth();
+  const [userName, setUserName] = useState(user?.name);
+  const [userAddress, setUserAddress] = useState(user?.address);
 
   // Initialize form values with user data
   useEffect(() => {
@@ -31,7 +33,8 @@ export default function ProfilePage() {
   const submit = async (data) => {
     setLoading(true);
     try {
-      await updateProfile(data);
+      const updatedData = {"name" : userName, "address" : userAddress};
+      await updateProfile(updatedData);
       message.success('Profile updated successfully!');
     } catch (error) {
       message.error('Failed to update profile. Please try again.');
@@ -54,7 +57,10 @@ export default function ProfilePage() {
                 minLength: { value: 5, message: 'Name must be at least 5 characters' },
               })}
               placeholder="Name"
-              defaultValue={user?.name || ''}
+              defaultValue={userName || ''}
+              onChange={(e) => {
+                setUserName(e.target.value);
+              }}
               status={errors.name ? 'error' : ''}
               className="w-full"
             />
@@ -68,7 +74,10 @@ export default function ProfilePage() {
                 minLength: { value: 10, message: 'Address must be at least 10 characters' },
               })}
               placeholder="Address"
-              defaultValue={user?.address || ''}
+              defaultValue={userAddress || ''}
+              onChange={(e) => {
+                setUserAddress(e.target.value);
+              }}
               status={errors.address ? 'error' : ''}
               className="w-full"
             />

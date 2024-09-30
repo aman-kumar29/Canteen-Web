@@ -1,12 +1,13 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { Button, Input, Typography } from 'antd'; // Using Ant Design's Input and Button
 import { useAuth } from '../../hooks/useAuth.js';
 const { Title } = Typography;
+
 export default function ChangePassword() {
   const {
     handleSubmit,
-    register,
+    control,
     getValues,
     formState: { errors },
   } = useForm();
@@ -20,17 +21,22 @@ export default function ChangePassword() {
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-auto mt-8">
       <center>
-        <Title level={4}>Channge Password</Title>
+        <Title level={4}>Change Password</Title>
       </center>
       <form onSubmit={handleSubmit(submit)} className="space-y-4">
         {/* Current Password */}
         <div className="flex flex-col space-y-2 py-3">
-          <Input.Password
-            placeholder="Current Password"
-            {...register('currentPassword', {
-              required: 'Current password is required',
-            })}
-            status={errors.currentPassword ? 'error' : ''}
+          <Controller
+            name="currentPassword"
+            control={control}
+            rules={{ required: 'Current password is required' }}
+            render={({ field }) => (
+              <Input.Password
+                placeholder="Current Password"
+                {...field}
+                status={errors.currentPassword ? 'error' : ''}
+              />
+            )}
           />
           {errors.currentPassword && (
             <p className="text-red-500 text-sm">{errors.currentPassword.message}</p>
@@ -39,16 +45,23 @@ export default function ChangePassword() {
 
         {/* New Password */}
         <div className="flex flex-col space-y-2">
-          <Input.Password
-            placeholder="New Password"
-            {...register('newPassword', {
+          <Controller
+            name="newPassword"
+            control={control}
+            rules={{
               required: 'New password is required',
               minLength: {
                 value: 5,
                 message: 'New password must be at least 5 characters',
               },
-            })}
-            status={errors.newPassword ? 'error' : ''}
+            }}
+            render={({ field }) => (
+              <Input.Password
+                placeholder="New Password"
+                {...field}
+                status={errors.newPassword ? 'error' : ''}
+              />
+            )}
           />
           {errors.newPassword && (
             <p className="text-red-500 text-sm">{errors.newPassword.message}</p>
@@ -57,16 +70,21 @@ export default function ChangePassword() {
 
         {/* Confirm New Password */}
         <div className="flex flex-col space-y-2">
-          <Input.Password
-            placeholder="Confirm Password"
-            {...register('confirmNewPassword', {
+          <Controller
+            name="confirmNewPassword"
+            control={control}
+            rules={{
               required: 'Please confirm your new password',
               validate: (value) =>
-                value !== getValues('newPassword')
-                  ? 'Passwords do not match'
-                  : true,
-            })}
-            status={errors.confirmNewPassword ? 'error' : ''}
+                value === getValues('newPassword') || 'Passwords do not match',
+            }}
+            render={({ field }) => (
+              <Input.Password
+                placeholder="Confirm Password"
+                {...field}
+                status={errors.confirmNewPassword ? 'error' : ''}
+              />
+            )}
           />
           {errors.confirmNewPassword && (
             <p className="text-red-500 text-sm">{errors.confirmNewPassword.message}</p>
